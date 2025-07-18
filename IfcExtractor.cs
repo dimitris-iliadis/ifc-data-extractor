@@ -36,12 +36,7 @@ namespace IfcDataExtractor
                 .LengthValue;
         }
 
-        public static string? GetRelatedZoneNumberFromElement(IIfcObject element)
-        {
-            return GetPropertyValue(element, "ArchiCADProperties", "Related Zone Number") ??
-                   GetPropertyValue(element, "ArchiCADProperties", "To Zone Number") ??
-                   GetPropertyValue(element, "ArchiCADProperties", "From Zone Number");
-        }
+        public static string? GetRelatedZoneNumberFromElement(IIfcObject element) => GetPropertyValue(element, "ArchiCADProperties", "Related Zone Number");
 
         public static string? GetFloorMaterial(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "02FloorType");
         public static string? GetCeilingMaterial(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "01CeilingType");
