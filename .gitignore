@@ -1,0 +1,9 @@
+# Dependencies
+/bin
+/obj
+
+# IFC files
+*.ifc
+
+# Reports
+/reports
