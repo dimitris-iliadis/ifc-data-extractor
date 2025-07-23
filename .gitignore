@@ -7,3 +7,6 @@
 
 # Reports
 /reports
+
+# macOS
+.DS_Store
