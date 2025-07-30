@@ -1,9 +1,16 @@
-using Xbim.Ifc;
+using System.ComponentModel;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Common;
 
 namespace IfcDataExtractor
 {
+    public enum Orientation : byte
+    {
+        East = 0,
+        North = 1,
+        West = 2,
+        South = 3
+    }
+
     public static class IfcExtractor
     {
         public static IIfcBuildingStorey? GetFloor(IIfcSpace space)
@@ -37,13 +44,19 @@ namespace IfcDataExtractor
         }
 
         public static string? GetRelatedZoneNumberFromElement(IIfcObject element) => GetPropertyValue(element, "ArchiCADProperties", "Related Zone Number");
-
         public static string? GetFloorMaterial(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "02FloorType");
         public static string? GetCeilingMaterial(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "01CeilingType");
-        public static string? GetWallFinishEast(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "0301FinishWallEastType");
-        public static string? GetWallFinishNorth(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "0302FinishWallNorthType");
-        public static string? GetWallFinishWest(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "0303FinishWallWestType");
-        public static string? GetWallFinishSouth(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "0304FinishWallSouthType");
+        public static string? GetWallFinish(IIfcSpace space, Orientation orientation)
+        {
+            return orientation switch
+            {
+                Orientation.East => GetPropertyValue(space, "PavCusPropZones", "0301FinishWallEastType"),
+                Orientation.North => GetPropertyValue(space, "PavCusPropZones", "0302FinishWallNorthType"),
+                Orientation.West => GetPropertyValue(space, "PavCusPropZones", "0303FinishWallWestType"),
+                Orientation.South => GetPropertyValue(space, "PavCusPropZones", "0304FinishWallSouthType"),
+                _ => throw new InvalidEnumArgumentException("Unknown wall orientation")
+            };
+        }
         public static string? GetSkirting(IIfcSpace space) => GetPropertyValue(space, "PavCusPropZones", "04WallPerimeterSet");
         public static IIfcLengthMeasure? GetPerimeter(IIfcSpace space) => GetLengthQuantityByName(space, "Zone Net Perimeter");
 
